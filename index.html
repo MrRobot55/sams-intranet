@@ -11,6 +11,7 @@
 </head>
 <body data-theme="light">
     <div id="top-progress"></div>
+    
     <div id="login-gate">
         <div class="login-box">
             <div class="login-brand">
@@ -20,12 +21,16 @@
                 <div class="system-badge">ACCÈS SÉCURISÉ</div>
             </div>
             <div class="login-form">
-                <div class="input-group"><i class="fa-solid fa-fingerprint"></i><input type="password" id="passkey" placeholder="CODE MATRICULE" maxlength="10" onkeypress="if(event.key==='Enter') checkAccess()"></div>
+                <div class="input-group">
+                    <i class="fa-solid fa-fingerprint"></i>
+                    <input type="password" id="passkey" placeholder="CODE MATRICULE" maxlength="10" onkeypress="if(event.key==='Enter') checkAccess()">
+                </div>
                 <button onclick="checkAccess()" class="login-btn"><span>S'IDENTIFIER</span><i class="fa-solid fa-chevron-right"></i></button>
                 <div id="load-status">Initialisation des protocoles...</div>
             </div>
         </div>
     </div>
+
     <div class="app-layout">
         <aside class="sidebar">
             <button id="sidebar-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-angles-left"></i></button>
@@ -52,6 +57,7 @@
                 </div>
             </div>
         </aside>
+
         <main class="content-area">
             <div id="app-HOME" class="app-container active">
                 <header class="content-header"><h1>Tableau de Bord</h1><p>Bienvenue sur l'intranet officiel du San Andreas Medical Service.</p></header>
@@ -71,6 +77,8 @@
             <div id="app-RH" class="app-container"><iframe id="iframe-RH"></iframe></div>
         </main>
     </div>
+
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

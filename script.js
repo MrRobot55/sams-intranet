@@ -1,41 +1,29 @@
-// --- CONFIGURATION ---
-const API_URL = "https://script.google.com/macros/s/AKfycbwvhzlPkZkMh9ve5b8A5RZ7klnwJuvxCdw5t50ruYTmqxd7ejvg5RogstJyWvaRMOCW/exec"; 
-const SECOURS_CODE = "2026"; 
-const URLS = {
-    INTRANET: "Lien_Planning", 
-    PORTAIL: "https://script.google.com/macros/s/AKfycbyIzrij_g4cEUDL_dh5WnagZIurQmjk5T15UO95ajLNFoGoBi831ChHJRhYutQ10DrjGw/exec", 
-    RH: "https://script.google.com/macros/s/AKfycby3yCxL7GvyczMm_sed0L0BOc4WggECSVJnI7_6vyWnirABIZv69WlrRNwOzhU4DX8/exec"
-};
-
+// INITIALISATION DE LA BASE DE DONNÉES
 let AGENTS_DATABASE = {};
 
-// --- INITIALISATION ---
 window.onload = () => {
     initTheme();
     loadDatabase();
     checkExistingSession();
     startClock();
-    // Restauration de l'état de la sidebar
     if (localStorage.getItem('sams_sidebar_collapsed') === 'true') {
         document.querySelector('.sidebar').classList.add('collapsed');
     }
 };
 
-// --- SIDEBAR TOGGLE ---
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.toggle('collapsed');
-    localStorage.setItem('sams_sidebar_collapsed', sidebar.classList.contains('collapsed'));
-}
-
-// --- HORLOGE ---
+// --- FONCTIONS SYSTÈME ---
 function startClock() {
     setInterval(() => {
         document.getElementById('real-time').innerText = new Date().toLocaleTimeString('fr-FR');
     }, 1000);
 }
 
-// --- GESTION DU THÈME ---
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sams_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+}
+
 function initTheme() {
     const savedTheme = localStorage.getItem('sams_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.body.setAttribute('data-theme', savedTheme);
@@ -43,8 +31,7 @@ function initTheme() {
 }
 
 function toggleTheme() {
-    const current = document.body.getAttribute('data-theme');
-    const target = current === 'dark' ? 'light' : 'dark';
+    const target = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.body.setAttribute('data-theme', target);
     localStorage.setItem('sams_theme', target);
     updateThemeUI(target);
@@ -57,7 +44,6 @@ function updateThemeUI(theme) {
     text.innerText = theme === 'dark' ? 'Mode Clair' : 'Mode Sombre';
 }
 
-// --- BARRE DE PROGRESSION ---
 function setProgress(percent) {
     const bar = document.getElementById('top-progress');
     bar.style.opacity = '1'; bar.style.width = percent + '%';
@@ -71,7 +57,7 @@ function setProgress(percent) {
 async function loadDatabase() {
     const status = document.getElementById('load-status');
     try {
-        const response = await fetch(API_URL);
+        const response = await fetch(SAMS_CONFIG.API_URL);
         AGENTS_DATABASE = await response.json();
         status.innerHTML = '<span style="color:#22c55e">● SYSTÈME SYNCHRONISÉ</span>';
     } catch (e) {
@@ -82,7 +68,7 @@ async function loadDatabase() {
 function checkAccess() {
     const code = document.getElementById('passkey').value.trim();
     if (!code) return;
-    if (code === SECOURS_CODE) finalizeLogin("DIRECTION SAMS");
+    if (code === SAMS_CONFIG.SECOURS_CODE) finalizeLogin("DIRECTION SAMS");
     else if (AGENTS_DATABASE[code]) finalizeLogin(AGENTS_DATABASE[code]);
     else { alert("MATRICULE INCORRECT"); document.getElementById('passkey').value = ""; }
 }
@@ -107,7 +93,7 @@ function loadApp(key, element) {
     const targetApp = document.getElementById('app-' + key);
     const targetIframe = document.getElementById('iframe-' + key);
     if (!targetIframe.src || targetIframe.src === window.location.href) {
-        setProgress(30); targetIframe.src = URLS[key];
+        setProgress(30); targetIframe.src = SAMS_CONFIG.URLS[key];
         targetIframe.onload = () => setProgress(100);
     } else setProgress(100);
     targetApp.classList.add('active');
