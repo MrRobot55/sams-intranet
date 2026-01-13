@@ -3,8 +3,8 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwvhzlPkZkMh9ve5b8A5RZ7
 const SECOURS_CODE = "2026"; 
 const URLS = {
     INTRANET: "Lien_Planning", 
-    PORTAIL:  "https://script.google.com/macros/s/AKfycbyIzrij_g4cEUDL_dh5WnagZIurQmjk5T15UO95ajLNFoGoBi831ChHJRhYutQ10DrjGw/exec", 
-    RH:       "https://script.google.com/macros/s/AKfycby3yCxL7GvyczMm_sed0L0BOc4WggECSVJnI7_6vyWnirABIZv69WlrRNwOzhU4DX8/exec"
+    PORTAIL: "https://script.google.com/macros/s/AKfycbyIzrij_g4cEUDL_dh5WnagZIurQmjk5T15UO95ajLNFoGoBi831ChHJRhYutQ10DrjGw/exec", 
+    RH: "https://script.google.com/macros/s/AKfycby3yCxL7GvyczMm_sed0L0BOc4WggECSVJnI7_6vyWnirABIZv69WlrRNwOzhU4DX8/exec"
 };
 
 let AGENTS_DATABASE = {};
@@ -15,7 +15,18 @@ window.onload = () => {
     loadDatabase();
     checkExistingSession();
     startClock();
+    // Restauration de l'état de la sidebar
+    if (localStorage.getItem('sams_sidebar_collapsed') === 'true') {
+        document.querySelector('.sidebar').classList.add('collapsed');
+    }
 };
+
+// --- SIDEBAR TOGGLE ---
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sams_sidebar_collapsed', sidebar.classList.contains('collapsed'));
+}
 
 // --- HORLOGE ---
 function startClock() {
@@ -26,8 +37,7 @@ function startClock() {
 
 // --- GESTION DU THÈME ---
 function initTheme() {
-    const savedTheme = localStorage.getItem('sams_theme') || 
-                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const savedTheme = localStorage.getItem('sams_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.body.setAttribute('data-theme', savedTheme);
     updateThemeUI(savedTheme);
 }
@@ -43,20 +53,14 @@ function toggleTheme() {
 function updateThemeUI(theme) {
     const icon = document.getElementById('theme-icon');
     const text = document.getElementById('theme-text');
-    if (theme === 'dark') {
-        icon.className = 'fa-solid fa-sun';
-        text.innerText = 'Mode Clair';
-    } else {
-        icon.className = 'fa-solid fa-moon';
-        text.innerText = 'Mode Sombre';
-    }
+    icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    text.innerText = theme === 'dark' ? 'Mode Clair' : 'Mode Sombre';
 }
 
 // --- BARRE DE PROGRESSION ---
 function setProgress(percent) {
     const bar = document.getElementById('top-progress');
-    bar.style.opacity = '1';
-    bar.style.width = percent + '%';
+    bar.style.opacity = '1'; bar.style.width = percent + '%';
     if(percent >= 100) {
         setTimeout(() => { bar.style.opacity = '0'; }, 400);
         setTimeout(() => { bar.style.width = '0%'; }, 700);
@@ -78,56 +82,34 @@ async function loadDatabase() {
 function checkAccess() {
     const code = document.getElementById('passkey').value.trim();
     if (!code) return;
-
-    if (code === SECOURS_CODE) {
-        finalizeLogin("DIRECTION SAMS");
-    } else if (AGENTS_DATABASE[code]) {
-        finalizeLogin(AGENTS_DATABASE[code]);
-    } else {
-        alert("MATRICULE INCORRECT OU ACCÈS RÉVOQUÉ");
-        document.getElementById('passkey').value = "";
-    }
+    if (code === SECOURS_CODE) finalizeLogin("DIRECTION SAMS");
+    else if (AGENTS_DATABASE[code]) finalizeLogin(AGENTS_DATABASE[code]);
+    else { alert("MATRICULE INCORRECT"); document.getElementById('passkey').value = ""; }
 }
 
 function finalizeLogin(name) {
     localStorage.setItem('sams_active', 'true');
     localStorage.setItem('sams_user', name);
-    
     document.getElementById('login-gate').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('login-gate').style.display = 'none';
-    }, 500);
-    
+    setTimeout(() => { document.getElementById('login-gate').style.display = 'none'; }, 500);
     document.getElementById('display-name').innerText = name.toUpperCase();
 }
 
 function checkExistingSession() {
-    if (localStorage.getItem('sams_active') === 'true') {
-        finalizeLogin(localStorage.getItem('sams_user'));
-    }
+    if (localStorage.getItem('sams_active') === 'true') finalizeLogin(localStorage.getItem('sams_user'));
 }
 
 // --- NAVIGATION ---
 function loadApp(key, element) {
-    // UI Menu
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     element.classList.add('active');
-
-    // UI Conteneurs
     document.querySelectorAll('.app-container').forEach(c => c.classList.remove('active'));
-    
     const targetApp = document.getElementById('app-' + key);
     const targetIframe = document.getElementById('iframe-' + key);
-
-    // Chargement intelligent
     if (!targetIframe.src || targetIframe.src === window.location.href) {
-        setProgress(30);
-        targetIframe.src = URLS[key];
+        setProgress(30); targetIframe.src = URLS[key];
         targetIframe.onload = () => setProgress(100);
-    } else {
-        setProgress(100);
-    }
-
+    } else setProgress(100);
     targetApp.classList.add('active');
 }
 
@@ -138,7 +120,4 @@ function showHome(element) {
     document.getElementById('app-HOME').classList.add('active');
 }
 
-function logout() {
-    localStorage.clear();
-    location.reload();
-}
+function logout() { localStorage.clear(); location.reload(); }

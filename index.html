@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAMS - Terminal Médical</title>
     <link rel="icon" type="image/png" href="logo.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
-
     <div id="top-progress"></div>
-
     <div id="login-gate">
         <div class="login-box">
             <div class="login-brand">
@@ -23,103 +20,57 @@
                 <div class="system-badge">ACCÈS SÉCURISÉ</div>
             </div>
             <div class="login-form">
-                <div class="input-group">
-                    <i class="fa-solid fa-fingerprint"></i>
-                    <input type="password" id="passkey" placeholder="CODE MATRICULE" maxlength="10" onkeypress="if(event.key==='Enter') checkAccess()">
-                </div>
-                <button onclick="checkAccess()" class="login-btn">
-                    <span>S'IDENTIFIER</span>
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
+                <div class="input-group"><i class="fa-solid fa-fingerprint"></i><input type="password" id="passkey" placeholder="CODE MATRICULE" maxlength="10" onkeypress="if(event.key==='Enter') checkAccess()"></div>
+                <button onclick="checkAccess()" class="login-btn"><span>S'IDENTIFIER</span><i class="fa-solid fa-chevron-right"></i></button>
                 <div id="load-status">Initialisation des protocoles...</div>
             </div>
         </div>
     </div>
-
     <div class="app-layout">
         <aside class="sidebar">
+            <button id="sidebar-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-angles-left"></i></button>
             <div class="sidebar-top">
                 <div class="brand-area">
                     <img src="logo.png" alt="SAMS">
-                    <div class="brand-info">
-                        <span class="brand-name">SAMS</span>
-                        <span class="brand-tag">TERMINAL</span>
-                    </div>
+                    <div class="brand-info"><span class="brand-name">SAMS</span><span class="brand-tag">TERMINAL</span></div>
                 </div>
-
                 <nav class="main-nav">
                     <div class="nav-section">PRINCIPAL</div>
-                    <div class="nav-item active" onclick="showHome(this)">
-                        <i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span>
-                    </div>
-                    
+                    <div class="nav-item active" onclick="showHome(this)"><i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span></div>
                     <div class="nav-section">OPÉRATIONS</div>
-                    <div class="nav-item" onclick="loadApp('INTRANET', this)">
-                        <i class="fa-solid fa-calendar-days"></i> <span>Planning Global</span>
-                    </div>
-                    <div class="nav-item" onclick="loadApp('PORTAIL', this)">
-                        <i class="fa-solid fa-file-medical"></i> <span>Intranet</span>
-                    </div>
-                    <div class="nav-item" onclick="loadApp('RH', this)">
-                        <i class="fa-solid fa-users-gear"></i> <span>Espace RH</span>
-                    </div>
+                    <div class="nav-item" onclick="loadApp('INTRANET', this)"><i class="fa-solid fa-calendar-days"></i> <span>Planning Global</span></div>
+                    <div class="nav-item" onclick="loadApp('PORTAIL', this)"><i class="fa-solid fa-file-medical"></i> <span>Intranet</span></div>
+                    <div class="nav-item" onclick="loadApp('RH', this)"><i class="fa-solid fa-users-gear"></i> <span>Espace RH</span></div>
                 </nav>
             </div>
-
             <div class="sidebar-bottom">
-                <div class="theme-switcher" onclick="toggleTheme()">
-                    <i class="fa-solid fa-moon" id="theme-icon"></i>
-                    <span id="theme-text">Mode Sombre</span>
-                </div>
-                <div class="clock-display">
-                    <i class="fa-regular fa-clock"></i>
-                    <span id="real-time">00:00:00</span>
-                </div>
+                <div class="theme-switcher" onclick="toggleTheme()"><i class="fa-solid fa-moon" id="theme-icon"></i><span id="theme-text">Mode Sombre</span></div>
+                <div class="clock-display"><i class="fa-regular fa-clock"></i> <span id="real-time">00:00:00</span></div>
                 <div class="user-card">
                     <div class="user-avatar"><i class="fa-solid fa-circle-user"></i></div>
-                    <div class="user-details">
-                        <span id="display-name">SESSION INACTIVE</span>
-                        <button onclick="logout()">Déconnexion</button>
-                    </div>
+                    <div class="user-details"><span id="display-name">SESSION INACTIVE</span><button onclick="logout()">Déconnexion</button></div>
                 </div>
             </div>
         </aside>
-
         <main class="content-area">
             <div id="app-HOME" class="app-container active">
-                <header class="content-header">
-                    <h1>Tableau de Bord</h1>
-                    <p>Bienvenue sur l'intranet officiel du San Andreas Medical Service.</p>
-                </header>
-                
+                <header class="content-header"><h1>Tableau de Bord</h1><p>Bienvenue sur l'intranet officiel du San Andreas Medical Service.</p></header>
                 <div class="dashboard-grid">
                     <div class="data-card">
-                        <div class="card-title">
-                            <i class="fa-solid fa-hand-holding-medical"></i>
-                            <span>Mutuelle</span>
-                        </div>
-                        <div class="card-content">
-                            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8CCTCawrciqmgUCaRL6zXp2wrCnclpZPsTDwgObdpvdTWWg-wE-zzTvdWEu4zYr6B1L2oP1uaIEAw/pubhtml?gid=0&single=true"></iframe>
-                        </div>
+                        <div class="card-title"><i class="fa-solid fa-hand-holding-medical"></i><span>Mutuelle</span></div>
+                        <div class="card-content"><iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8CCTCawrciqmgUCaRL6zXp2wrCnclpZPsTDwgObdpvdTWWg-wE-zzTvdWEu4zYr6B1L2oP1uaIEAw/pubhtml?gid=0&single=true"></iframe></div>
                     </div>
                     <div class="data-card">
-                        <div class="card-title">
-                            <i class="fa-solid fa-bullhorn"></i>
-                            <span>Tarifs</span>
-                        </div>
-                        <div class="card-content">
-                            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9D5StHhNHHd828HNI5WnfJvAdr-Vrk5xUjfMGiFTUAp2RqYk5AudAsWp-H6enwoGgRVH2DrKN3FK/pubhtml?gid=0&single=true"></iframe>
-                        </div>
+                        <div class="card-title"><i class="fa-solid fa-bullhorn"></i><span>Tarifs</span></div>
+                        <div class="card-content"><iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTn9D5StHhNHHd828HNI5WnfJvAdr-Vrk5xUjfMGiFTUAp2RqYk5AudAsWp-H6enwoGgRVH2DrKN3FK/pubhtml?gid=0&single=true"></iframe></div>
                     </div>
                 </div>
             </div>
-
             <div id="app-INTRANET" class="app-container"><iframe id="iframe-INTRANET"></iframe></div>
             <div id="app-PORTAIL" class="app-container"><iframe id="iframe-PORTAIL"></iframe></div>
             <div id="app-RH" class="app-container"><iframe id="iframe-RH"></iframe></div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
