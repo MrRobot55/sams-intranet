@@ -1,10 +1,10 @@
 // --- CONFIGURATION ---
 const API_URL = "https://script.google.com/macros/s/AKfycbwvhzlPkZkMh9ve5b8A5RZ7klnwJuvxCdw5t50ruYTmqxd7ejvg5RogstJyWvaRMOCW/exec"; 
-const ADMIN_CODE = "2026"; 
+const SECOURS_CODE = "2026"; 
 const URLS = {
     INTRANET: "Lien_Planning", 
-    PORTAIL:  "Lien_Protocoles", 
-    RH:       "Lien_RH"
+    PORTAIL:  "https://script.google.com/macros/s/AKfycbyIzrij_g4cEUDL_dh5WnagZIurQmjk5T15UO95ajLNFoGoBi831ChHJRhYutQ10DrjGw/exec", 
+    RH:       "https://script.google.com/macros/s/AKfycby3yCxL7GvyczMm_sed0L0BOc4WggECSVJnI7_6vyWnirABIZv69WlrRNwOzhU4DX8/exec"
 };
 
 let AGENTS_DATABASE = {};
@@ -79,7 +79,7 @@ function checkAccess() {
     const code = document.getElementById('passkey').value.trim();
     if (!code) return;
 
-    if (code === ADMIN_CODE) {
+    if (code === SECOURS_CODE) {
         finalizeLogin("DIRECTION SAMS");
     } else if (AGENTS_DATABASE[code]) {
         finalizeLogin(AGENTS_DATABASE[code]);
