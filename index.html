@@ -4,173 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAMS - Central Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0f172a;      /* Bleu nuit */
-            --accent: #ef4444;       /* Rouge Urgence */
-            --sidebar-width: 260px;
-            --text-light: #f1f5f9;
-            --text-muted: #94a3b8;
+            --bg-dark: #020617;
+            --side-bg: #0f172a;
+            --accent: #ef4444;       /* Rouge SAMS */
+            --accent-hover: #dc2626;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; background: #e2e8f0; }
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            display: flex; height: 100vh; 
+            overflow: hidden; background: var(--bg-dark); 
+            color: var(--text-main);
+        }
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: var(--sidebar-width);
-            background: var(--primary);
-            color: white;
+            width: 280px;
+            background: var(--side-bg);
             display: flex;
             flex-direction: column;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            border-right: 1px solid var(--border);
             z-index: 10;
         }
 
         .brand {
-            padding: 30px;
-            font-size: 24px;
-            font-weight: 800;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            padding: 40px 30px;
+            text-align: center;
         }
-        .brand span { color: var(--accent); }
+        
+        .brand-logo {
+            font-size: 40px;
+            color: var(--accent);
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.3));
+        }
 
-        .menu { flex: 1; padding: 20px 0; display: flex; flex-direction: column; gap: 5px; }
+        .brand-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .brand-text span { color: var(--accent); }
+
+        .menu { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
 
         .menu-item {
-            padding: 15px 30px;
+            padding: 14px 20px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             gap: 15px;
             font-size: 14px;
-            color: var(--text-muted);
-            border-left: 4px solid transparent;
+            font-weight: 500;
+            color: var(--text-dim);
+            border-radius: 12px;
             text-decoration: none;
         }
 
-        .menu-item:hover { background: rgba(255,255,255,0.05); color: white; }
-        .menu-item.active { background: rgba(255,255,255,0.1); color: white; border-left-color: var(--accent); }
-        .menu-item i { width: 20px; text-align: center; }
+        .menu-item:hover { background: var(--glass); color: white; transform: translateX(5px); }
+        .menu-item.active { background: var(--accent); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.2); }
+        .menu-item i { font-size: 18px; width: 25px; }
 
-        .footer { padding: 20px; font-size: 11px; color: var(--text-muted); text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
-
-        /* --- MAIN CONTENT --- */
-        .content { flex: 1; position: relative; display: flex; flex-direction: column; }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: none; /* Caché par défaut */
-            background: white;
+        .status-badge {
+            margin: 20px;
+            padding: 15px;
+            background: var(--glass);
+            border-radius: 12px;
+            font-size: 12px;
+            border: 1px solid var(--border);
         }
         
-        iframe.visible { display: block; animation: fadeIn 0.5s; }
+        .dot { height: 8px; width: 8px; background: #22c55e; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 10px #22c55e; }
 
-        /* --- ACCUEIL (Défaut) --- */
+        /* --- MAIN CONTENT --- */
+        .content { flex: 1; position: relative; background: radial-gradient(circle at top right, #1e1b4b, #020617); }
+
+        iframe {
+            width: 100%; height: 100%; border: none;
+            display: none; background: transparent;
+        }
+        
+        iframe.visible { display: block; animation: zoomFade 0.6s ease-out; }
+
+        /* --- ACCUEIL --- */
         #home-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center;
+            text-align: center; padding: 20px;
         }
-        .hero-title { font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
-        .hero-sub { color: #64748b; font-size: 1.2rem; max-width: 600px; line-height: 1.5; }
-        .btn-start {
-            margin-top: 30px; padding: 15px 40px; background: var(--accent); color: white;
-            font-weight: 700; border-radius: 50px; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+
+        .hero-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 60px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            max-width: 800px;
         }
-        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(239, 68, 68, 0.4); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 15px; background: linear-gradient(to bottom, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-sub { color: var(--text-dim); font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; }
 
-        /* Indicateur de chargement */
+        .btn-grid { display: flex; gap: 20px; justify-content: center; }
+
+        .btn-main {
+            padding: 16px 32px; background: var(--accent); color: white;
+            font-weight: 700; border-radius: 14px; cursor: pointer; transition: 0.3s;
+            border: none; font-size: 15px; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-3px); box-shadow: 0 20px 40px rgba(239, 68, 68, 0.25); }
+        
+        .btn-outline {
+            padding: 16px 32px; background: transparent; color: white;
+            font-weight: 700; border-radius: 14px; cursor: pointer; transition: 0.3s;
+            border: 1px solid var(--border); font-size: 15px;
+        }
+        .btn-outline:hover { background: var(--glass); border-color: white; }
+
+        @keyframes zoomFade { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
         #loader {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            display: none; color: var(--primary); font-weight: 600;
+            display: none; text-align: center;
         }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--glass); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="brand">🏥 SAMS <span>Hub</span></div>
+        <div class="brand">
+            <div class="brand-logo"><i class="fa-solid fa-house-medical"></i></div>
+            <div class="brand-text">SAMS <span>System</span></div>
+        </div>
+
         <div class="menu">
             <div class="menu-item active" onclick="showHome(this)">
-                🏠 Accueil
+                <i class="fa-solid fa-chart-line"></i> Accueil
             </div>
             <div class="menu-item" onclick="loadApp('INTRANET', this)">
-                🚑 Intranet Médical
+                <i class="fa-solid fa- briefcase-medical"></i> Intranet Médical
             </div>
             <div class="menu-item" onclick="loadApp('PORTAIL', this)">
-                👤 Mon Espace Pro
+                <i class="fa-solid fa-user-doctor"></i> Portail Soignant
             </div>
-            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 10px 20px;"></div>
+            <div style="height: 1px; background: var(--border); margin: 15px 20px;"></div>
             <div class="menu-item" onclick="loadApp('RH', this)">
-                🔐 Administration RH
+                <i class="fa-solid fa-shield-halved"></i> Espace Direction RH
             </div>
         </div>
-        <div class="footer">
-            SAMS System v2.0<br>© 2026 RedStart
+
+        <div class="status-badge">
+            <div style="margin-bottom: 8px;"><span class="dot"></span> Systèmes Opérationnels</div>
+            <div style="color: var(--text-dim); font-size: 10px;">Serveur : San Andreas Central</div>
         </div>
     </div>
 
     <div class="content">
-        
         <div id="home-screen">
-            <div style="font-size: 5rem; margin-bottom: 20px;">🏥</div>
-            <div class="hero-title">San Andreas Medical Service</div>
-            <div class="hero-sub">Bienvenue sur le hub centralisé du SAMS.<br>Sélectionnez un outil dans le menu pour commencer votre service.</div>
-            <div class="btn-start" onclick="loadApp('INTRANET', document.querySelectorAll('.menu-item')[1])">COMMENCER LE SERVICE</div>
+            <div class="hero-card">
+                <div class="hero-title">San Andreas Medical Service</div>
+                <div class="hero-sub">Plateforme de gestion hospitalière haut débit. <br>Accédez aux dossiers patients, gérez vos gardes et suivez votre carrière en temps réel.</div>
+                <div class="btn-grid">
+                    <button class="btn-main" onclick="loadApp('INTRANET', document.querySelectorAll('.menu-item')[1])">
+                        <i class="fa-solid fa-power-off"></i> PRENDRE SON SERVICE
+                    </button>
+                    <button class="btn-outline" onclick="loadApp('PORTAIL', document.querySelectorAll('.menu-item')[2])">CONSULTER MON DOSSIER</button>
+                </div>
+            </div>
         </div>
 
-        <div id="loader">Chargement de l'application...</div>
+        <div id="loader">
+            <div class="spinner"></div>
+            <div style="font-weight: 600; letter-spacing: 1px;">INITIALISATION...</div>
+        </div>
 
         <iframe id="appFrame" src=""></iframe>
     </div>
 
     <script>
-        // ======================================================
-        // 👇 CONFIGURATION DES LIENS (COLLE TES URLS ICI) 👇
-        // ======================================================
-        const URLS = {
+        // CONFIGURATION - REMPLACE PAR TES LIENS
+      const URLS = {
             INTRANET: "https://script.google.com/macros/s/AKfycbyIzrij_g4cEUDL_dh5WnagZIurQmjk5T15UO95ajLNFoGoBi831ChHJRhYutQ10DrjGw/exec",
             PORTAIL:  "https://script.google.com/macros/s/AKfycby3yCxL7GvyczMm_sed0L0BOc4WggECSVJnI7_6vyWnirABIZv69WlrRNwOzhU4DX8/exec",
             RH:       "https://script.google.com/macros/s/Ton-Lien-RH-ICI/exec"
         };
-        // ======================================================
 
         const frame = document.getElementById('appFrame');
         const home = document.getElementById('home-screen');
         const loader = document.getElementById('loader');
 
         function loadApp(appKey, el) {
-            // Gestion active menu
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             if(el) el.classList.add('active');
 
-            // Animation interface
             home.style.display = 'none';
             frame.classList.remove('visible');
             loader.style.display = 'block';
 
-            // Chargement URL
             const url = URLS[appKey];
-            if(url && url.includes("http")) {
+            if(url && url.length > 10) {
                 frame.src = url;
                 frame.onload = () => {
                     loader.style.display = 'none';
                     frame.classList.add('visible');
                 };
             } else {
-                alert("L'URL pour " + appKey + " n'est pas encore configurée dans le fichier index.html !");
+                alert("Erreur : Lien non configuré.");
                 loader.style.display = 'none';
                 showHome();
             }
@@ -178,14 +230,12 @@
 
         function showHome(el) {
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            if(el) el.classList.add('active'); // Sécurité si el est undefined
+            if(el) el.classList.add('active');
             else document.querySelectorAll('.menu-item')[0].classList.add('active');
-
             frame.classList.remove('visible');
-            frame.src = "about:blank"; // Reset iframe
+            frame.src = "about:blank";
             home.style.display = 'flex';
         }
     </script>
-
 </body>
 </html>
